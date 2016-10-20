@@ -1,20 +1,16 @@
-
 package com.cloudmedia
 
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.storage.StorageLevel
-
-import org.apache.kafka.clients.consumer.ConsumerRecord //kafka_2.10-0.10.0.1
-import org.apache.kafka.common.serialization.StringDeserializer //kafka_2.10-0.10.0.1
-import org.apache.spark.streaming.kafka010._ //spark-streaming-kafka-0-10_2.11-2.0.1
-import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent //spark-streaming-kafka-0-10_2.11-2.0.1
-import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe //spark-streaming-kafka-0-10_2.11-2.0.1
-
+import org.apache.kafka.clients.consumer.ConsumerRecord 
+import org.apache.kafka.common.serialization.StringDeserializer 
+import org.apache.spark.streaming.kafka010._ 
+import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent 
+import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe 
 import scala.util.matching.Regex
 
 
-/** Working example of listening for log data from Kafka's testLogs topic on port 9092. */
 object WebLogProcessing {
 
   // function to extract time from the web log
