@@ -15,13 +15,13 @@ http://www.planetcassandra.org/cassandra/
 
 1.3. Open Datastax DevCenter, and execute the folowing cql in orders:
 
-CREATE KEYSPACE WebLogDatabase WITH REPLICATION = {'class' : 'SimpleStrategy', 'replication_factor' : 1};
+  # CREATE KEYSPACE WebLogDatabase WITH REPLICATION = {'class' : 'SimpleStrategy', 'replication_factor' : 1};
 
-USE WebLogDatabase; CREATE TABLE WebLog (Time text PRIMARY KEY, IP text, URL text, Status varint, UserAgent text);
+  # USE WebLogDatabase; CREATE TABLE WebLog (Time text PRIMARY KEY, IP text, URL text, Status varint, UserAgent text);
 
-USE WebLogDatabase; INSERT INTO WebLog (Time, IP, URL, Status, UserAgent) VALUES ('29/Nov/2015:03:50:05', '156.23.45.89', '/news', 520, 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0)');
+  # USE WebLogDatabase; INSERT INTO WebLog (Time, IP, URL, Status, UserAgent) VALUES ('29/Nov/2015:03:50:05', '156.23.45.89', '/news', 520, 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0)');
 
-USE WebLogDatabase; SELECT * FROM WebLog;
+  # USE WebLogDatabase; SELECT * FROM WebLog;
 
 Step 2. Set up Kafka: 
 
@@ -31,9 +31,9 @@ https://dzone.com/articles/running-apache-kafka-on-windows-os
 
 2.2. Start Zookeeper server
 
-cd C:\zookeeper\zookeeper-3.3.6\bin
+  # cd C:\zookeeper\zookeeper-3.3.6\bin
  
-# zkserver
+  # zkserver
  
 2.3. Start Kafka broker:
 
@@ -51,8 +51,8 @@ Step 3. Run the spark program
 
 Step 4. Create a producer to send the web log to Kafka broker
 
-# cd C:\kafka\kafka_2.11-0.10.0.1\bin\windows
+  # cd C:\kafka\kafka_2.11-0.10.0.1\bin\windows
  
-# kafka-console-producer.bat --broker-list localhost:9092 --topic testLogs < web_log_data.txt
+  # kafka-console-producer.bat --broker-list localhost:9092 --topic testLogs < web_log_data.txt
  
 
