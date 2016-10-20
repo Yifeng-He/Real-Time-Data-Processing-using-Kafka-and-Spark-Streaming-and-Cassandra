@@ -9,9 +9,9 @@ http://www.planetcassandra.org/cassandra/
 
 1.2. Start Cassandra server:
 
-# cd C:\cassandra\apache-cassandra\bin
+  # cd C:\cassandra\apache-cassandra\bin
 
-# cassandra
+  # cassandra
 
 1.3. Open Datastax DevCenter, and execute the folowing cql in orders:
 
@@ -31,9 +31,9 @@ https://dzone.com/articles/running-apache-kafka-on-windows-os
 
 2.2. Start Zookeeper server
 
- # cd C:\zookeeper\zookeeper-3.3.6\bin
+cd C:\zookeeper\zookeeper-3.3.6\bin
  
- # zkserver
+# zkserver
  
 2.3. Start Kafka broker:
 
