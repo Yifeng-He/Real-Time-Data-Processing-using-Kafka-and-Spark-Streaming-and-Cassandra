@@ -13,59 +13,70 @@ import scala.util.matching.Regex
 
 object WebLogProcessing {
 
-  // function to extract time from the web log
-  def extractTime(str_input : String) : String = {
-    val pattern = """\[.*\]""".r
-    val str_time = pattern.findFirstMatchIn(str_input).getOrElse("NA").toString() 
-    if (str_time != "NA") {
-      str_time.split(" ")(0).stripPrefix("[")
-    }
-    else {
-      str_time
-    }
-  } 
- 
-  // function to extract IP address from the web log
-  def extractIP (str_input : String) : String = {
-    val pattern = """\d{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}""".r
-    pattern.findFirstMatchIn(str_input).getOrElse("NA").toString()
-  }
-
-  // function to extract the requested URL
-  def extractURL(str_input : String) : String = {
-    val pattern = new Regex("(GET|POST).*HTTP")
-    val str_URL = pattern.findFirstMatchIn(str_input).getOrElse("NA").toString()
-    if(str_URL !="NA"){
-      str_URL.toString().split(" ")(1)
-    }
-    else {
-      str_URL
-    }      
-  }    
-  
-  // function to extract the status code from the web log
-  def extractStatusCode(str_input : String) : Int = {
-    val pattern = new Regex("\" [0-9][0-9][0-9]") 
-    val matched_str = pattern.findFirstMatchIn(str_input).getOrElse("0").toString()
-    if (matched_str != "0") {
-      matched_str.toString().split(" ")(1).toInt
-    }
-    else {
-      matched_str.toInt
-    }
-  }
-
-  // function to extract user agent from the web log
-  def extractAgent(str_input : String) : String = {
-    val pattern = new Regex("\" \".+\"$")
-    val str_agent = pattern.findFirstMatchIn(str_input).getOrElse("NA").toString()
-    if(str_agent != "NA"){
-      str_agent.stripPrefix("\"").stripSuffix("\"").trim.stripPrefix("\"")
-    }
-    else {
-      str_agent
-    }      
-  } 
+  // extract (Time, IP, URL, Status, UserAgent) from a line of web log like this:
+  // 66.249.75.168 - - [29/Nov/2015:06:24:05 +0000] "GET /national/?pg=1 HTTP/1.1" 200 11100 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+  def extractInformation (input_string : String) : (String, String, String, Int, String) = {
+      // pattern for time
+      val pattern_time = """\[.*\]""".r
+      // pattern for IP address
+      val pattern_IP = """\d{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}""".r
+      // pattern for URL
+      val pattern_URL = new Regex("(GET|POST).*HTTP")
+      // pattern for status code
+      val pattern_status = new Regex("\" [0-9][0-9][0-9]")
+      // pattern for user agent
+      val pattern_agent = new Regex("\" \".+\"$")
+      
+      // extract time
+      val str_time_raw = pattern_time.findFirstMatchIn(input_string).getOrElse("NA").toString() 
+      val str_time = {
+        if (str_time_raw != "NA") {
+          str_time_raw.split(" ")(0).stripPrefix("[")
+        }
+        else {
+          str_time_raw
+        }
+      }
+      
+      // extract IP address
+      val str_IP = pattern_IP.findFirstMatchIn(input_string).getOrElse("NA").toString()
+      
+      // extract URL
+      val str_URL_raw = pattern_URL.findFirstMatchIn(input_string).getOrElse("NA").toString()
+      val str_URL = {
+        if(str_URL_raw !="NA"){
+          str_URL_raw.toString().split(" ")(1)
+        }
+        else {
+          str_URL_raw
+        }
+      }
+      
+      // extract status code
+      val str_status_raw = pattern_status.findFirstMatchIn(input_string).getOrElse("0").toString()
+      val status = {
+        if (str_status_raw != "0") {
+          str_status_raw.toString().split(" ")(1).toInt
+        }
+        else {
+          str_status_raw.toInt
+        }
+      }
+      
+      // extract user agent
+      val str_agent_raw = pattern_agent.findFirstMatchIn(input_string).getOrElse("NA").toString()
+      val str_agent = {
+        if(str_agent_raw != "NA"){
+          str_agent_raw.stripPrefix("\"").stripSuffix("\"").trim.stripPrefix("\"")
+        }
+        else {
+          str_agent_raw
+        }
+      }
+      
+      // return a tuple
+      (str_time, str_IP, str_URL, status, str_agent)   
+    } 
 
   // set the log level to ERROR 
   def setupLogging() = {
@@ -106,7 +117,7 @@ object WebLogProcessing {
     // the DStream containing the log lines
     val dstream_lines = input_stream.map(record => record.value) 
     // get the DStream containing tuples of (Time, IP, URL, Status, UserAgent)
-    val dstream_tuples = dstream_lines.map(line => (extractTime(line), extractIP(line), extractURL(line), extractStatusCode(line), extractAgent(line)))
+    val dstream_tuples = dstream_lines.map(extractInformation)
     
     // process the log: to save the logs with status of error into Cassandra database
     dstream_tuples.foreachRDD((rdd, time) => {
