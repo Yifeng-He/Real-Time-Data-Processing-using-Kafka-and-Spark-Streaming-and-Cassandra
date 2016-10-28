@@ -1,7 +1,7 @@
 # Real-Time-Data-Processing-using-Kafka-Spark-Streaming-and-Cassandra
 This project aims to mine the logs with error status codes from Kafka real-time streaming data and save them into Cassandra database.
 
-# Step 1. Set up Cassandra
+* Step 1. Set up Cassandra
 
 1.1 Download DataStax Distribution of Apache Cassandra from the link below, and then install it in Windows
 
@@ -23,7 +23,7 @@ http://www.planetcassandra.org/cassandra/
 
   # USE WebLogDatabase; SELECT * FROM WebLog;
 
-# Step 2. Set up Kafka: 
+* Step 2. Set up Kafka: 
 
 2.1. Install Kafka in Windows by following the instruction in the link below:
 
@@ -47,9 +47,9 @@ https://dzone.com/articles/running-apache-kafka-on-windows-os
  
  # kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic testLogs
  
-# Step 3. Run the spark program 
+* Step 3. Run the spark program 
 
-# Step 4. Create a producer to send the web log to Kafka broker
+* Step 4. Create a producer to send the web log to Kafka broker
 
   # cd C:\kafka\kafka_2.11-0.10.0.1\bin\windows
  
