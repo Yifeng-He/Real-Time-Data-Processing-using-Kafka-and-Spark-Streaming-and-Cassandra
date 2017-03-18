@@ -9,9 +9,9 @@ http://www.planetcassandra.org/cassandra/
 
 1.2. Start Cassandra server:
 
-  cd C:\cassandra\apache-cassandra\bin
+  $ cd C:\cassandra\apache-cassandra\bin
 
-  cassandra
+  $ cassandra
 
 1.3. Open Datastax DevCenter, and execute the folowing cql in orders:
 
